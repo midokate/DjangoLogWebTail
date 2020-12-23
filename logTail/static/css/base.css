@@ -1,0 +1,40 @@
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+#navbar{
+    color: black;
+}
+
+#side_bar {
+    background:#f0740e;
+    z-index: 500;
+    height: 100vh;
+}
+
+#side_bar-logo {
+    background:#f0740e;
+    z-index: 500;
+    height: 50px;
+}
+#header {               
+    height: 50px;
+    background: #f0740e;
+    border-bottom: 1px solid black;
+    position: sticky;
+    top: 0px;
+    right: 0px;
+    z-index: 500;
+
+}
+
+.content{
+    background-color: wheat;
+    height: 500px;
+}
+
+#side_bar_button {
+    position: sticky;
+    top: 50px;
+}
+

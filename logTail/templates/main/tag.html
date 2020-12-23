@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MiniBlog</title>
+        {% block css %}
+        {% endblock css %}
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/tag.css' %}">
+    </head>
+    <body style="background: #ecf0f1;">
+        <!--NavBar-->
+        <nav id="navbar" >
+            <div class="row m-0 p-0">
+                
+                <div id="side_bar" class=" m-0 col-2 m-0">
+                    <div id="side_bar-logo" class=" m-0"></div>
+                    <div id="side_bar_button"><a > button </a></div>
+                </div>
+                <div class="p-0 m-0 col-10">
+                    <div id="header"></div>
+                    <div class="row">
+                        <div class="col-2 m-0"></div>
+                        <div class=" content  mt-3 col-8 container">
+                            <div class="tag-container flex-container  bg-light">
+                                <input name="fname" class="bg-light tag-input" type="text">
+                            </div>
+                            {% block body %}
+                            {% endblock body %}    
+                        </div>
+                        <div class="col-2 m-0 p-0"></div>
+                    </div> 
+                </div>
+            </div>
+        </nav>
+        <!--NavBar end-->
+
+        <script src="{%  static "js/jquery.js" %}" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/e7c2f3706d.js" crossorigin="anonymous"></script>
+        <script src="{% static "js/app.js" %}"></script>
+        {% block js %}
+        {% endblock js %}       
+    </body>
+</html>
