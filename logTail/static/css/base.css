@@ -28,13 +28,79 @@
 
 }
 
+
 .content{
-    background-color: wheat;
+    background-color: honeydew;
     height: 500px;
+    -webkit-box-shadow: 3px 2px 15px 5px rgba(250, 164, 65, 0.085); 
+    box-shadow: 3px 2px 15px 5px rgba(250, 164, 65, 0.085);
+    border: black 1px solid;
+    border-radius: 10px;
 }
+
+
 
 #side_bar_button {
     position: sticky;
     top: 50px;
 }
+/*  tree view*/
 
+  #listing {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    position: relative;
+  }
+
+  #listing ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    position: relative;
+  }
+  #listing li {
+    list-style-type: none;
+    border-left: 2px solid #000;
+    margin-left: 1em;
+  }
+  #listing li div {
+    padding-left: 1em;
+    position: relative;
+  }
+  #listing li div::before {
+    content:'';
+    position: absolute;
+    top: 0;
+    left: -2px;
+    bottom: 50%;
+    width: 0.75em;
+    border: 2px solid #000;
+    border-top: 0 none transparent;
+    border-right: 0 none transparent;
+  }
+  #listing ul > li:last-child {
+    border-left: 2px solid transparent;
+  }
+
+  #listing li div i {
+    margin-right: 3px;
+  }
+
+  .fa-folder {
+    color: burlywood;
+  }
+
+  .fa-file {
+    color:cornflowerblue;
+  }
+
+  .listing-container {
+    overflow: scroll;
+    border: 2px orange solid;
+    min-height: 270px;
+  }
+
+  .listing-container  ul,li p {
+    display: inline;
+  }

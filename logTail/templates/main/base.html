@@ -20,16 +20,32 @@
                     <div id="side_bar-logo" class=" m-0"></div>
                     <div id="side_bar_button"><a > button </a></div>
                 </div>
-                <div class="p-0 m-0 col-10">
+                <div class="p-0 m-0 col-10 bg-light">
                     <div id="header"></div>
                     <div class="row">
                         <div class="col-2 m-0"></div>
                         <div class=" content  mt-3 col-8 container">
-                        <ul id="listing">
-                        
-                        </ul>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-10" for="path">Path</label>
+                                    <label  class="col-2" for="depth">Depth</label>
+                                </div>
+                                <div class="row">
+                                    <input type="text" class="col-10 form-control" id="path" aria-describedby="Type the folder path to scrape" placeholder="Type folder path to scrape">
+                                    <input type="number" value="5" min="1" class="col-2 form-control" id="depth"  placeholder="Subtree depth">
+                                    <small id="emailHelp" class="form-text text-muted"> Linux format:  <strong>c:\folder</strong>  becomes <strong>/c/folder</strong></small>
+                                </div>
+                                <div class="row">
+                                    <button id="go-button" type="button" class="col-1 btn btn-info">Go</button>
+                                </div>
+                            </div>
+                            <div class="listing-container" >
+                                <ul id="listing" class="tree">
+
+                                </ul>
+                            </div>
                             {% block body %}
-                            {% endblock body %}    
+                            {% endblock body %} 
                         </div>
                         <div class="col-2 m-0 p-0"></div>
                     </div> 
