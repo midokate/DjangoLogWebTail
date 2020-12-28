@@ -19,16 +19,16 @@ $(function(){
         ]
         }
     ];
+//tooltip
+$('[data-toggle="tooltip"]').tooltip()
 
-console.log(tree_objects)
-    function allItemsUnsellect(){
-       
-    }
     function itemClicked(){
         $(".listing-container  li > div").off().on("click",function(){ 
-            $(".listing-container  ul,li div.bg-primary").removeClass("bg-primary");
-            $(this).addClass("bg-primary");
-            $(this).siblings("ul").toggle()
+            if ($(this).children("i:first-child").hasClass("permision_ok")){
+                $(".listing-container  ul,li div.bg-primary").removeClass("bg-primary");
+                $(this).addClass("bg-primary");
+                $(this).siblings("ul").toggle()
+            }
 
             //console.log(this.parentElement.find("ul"))
             //this.parent().find("ul").slideToggle()
@@ -45,25 +45,34 @@ console.log(tree_objects)
         else if ( item.childs in tree_objects &&  counter <= depth  ) {
             counter++
             if ( item.childs ){
-                parent.append("<li ftype='"+item.type+"'  path="+path+"' id='"+item.name+"_"+counter+"'><div><i class=\"fas fa-"+item.type +"\"></i>"+item.name+"/div></li>")
-                $("#"+item.name+"_"+counter).append("<ul id='"+item.name+"_"+counter+"_ul' ></ul>")
-                createItem(item.childs,$("#"+item.name+"_"+counter+"_ul"),counter,depth,path)
+                parent.append("<li ftype='"+item.type+"'  path="+path+"' id='"+item.name+"_"+counter+"'><div><i class=\"permision_ok fas fa-"+item.type +"\"></i>"+item.name+"/div></li>")
+                $("[id='"+item.name+"_"+counter+"']").append("<ul id='"+item.name+"_"+counter+"_ul' ></ul>")
+                createItem(item.childs,$("[id='"+item.name+"_"+counter+"_ul']"),counter,depth,path)
             }
             else {
-                /* doesn't contain childs */
-                parent.append("<li  ftype='"+item.type+"' path='"+path+"' id='"+item.name+"_"+counter+"'><div><i class=\"fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")
+                if(item.childs===false){
+                    parent.append("<li   ftype='"+item.type+"' path='"+path+"' id='"+item.name+"_"+counter+"'><div data-toggle=\"tooltip\" data-placement=\"top\" title=\"Permission denied\" ><i class=\" permision_ko fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")
+                }
+                else{
+                     /* doesn't contain childs */
+                    parent.append("<li  ftype='"+item.type+"' path='"+path+"' id='"+item.name+"_"+counter+"'><div><i class=\"permision_ok fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")
+                }
             }
         }
         else if (  item.childs && counter <= depth ){
             counter++
-            parent.append("<li ftype='"+item.type+"'  path='"+path+"' id='"+item.name+"_"+counter+"'><div><i class=\"fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")
-            $("#"+item.name+"_"+counter).append("<ul id='"+item.name+"_"+counter+"_ul' ></ul>")
-            createItem(item.childs,$("#"+item.name+"_"+counter+"_ul"),counter,depth,path)
+            parent.append("<li ftype='"+item.type+"'  path='"+path+"' id='"+item.name+"_"+counter+"'><div><i class=\"permision_ok fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")
+            $("[id='"+item.name+"_"+counter+"']").append("<ul id='"+item.name+"_"+counter+"_ul' ></ul>")
+            createItem(item.childs,$("[id='"+item.name+"_"+counter+"_ul']"),counter,depth,path)
         }
         else {
             if (counter <= depth){
-                counter++
-                parent.append("<li ftype='"+item.type+"' path='"+path+"' id='"+item.name+"_"+counter+"'><div><i class=\"fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")               
+                if (item.childs === false) {
+                    parent.append("<li ftype='"+item.type+"' path='"+path+"' id='"+item.name+"_"+counter+"'><div data-toggle=\"tooltip\" data-placement=\"top\" title=\"Permission denied\" ><i class=\"permision_ko fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")
+                }
+                else {
+                    parent.append("<li ftype='"+item.type+"' path='"+path+"' id='"+item.name+"_"+counter+"'><div><i class=\"permision_ok fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")               
+                }
             }
         }
         itemClicked()
@@ -80,6 +89,10 @@ console.log(tree_objects)
 
 b=null
     $("#go-button").on("click",function(){
+        $("#go-button").after(`<div id="loading" class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>`)
+        
         path=$("#path").val()
         depth=$("#depth").val()
         $.ajaxSetup({ 
@@ -115,7 +128,18 @@ b=null
             success: function (response) {
                 let jresult=JSON.parse(JSON.stringify(response))
                 drawTree(jresult)
+                $("#loding").remove()
                 console.log(jresult)
+            },
+            error: function(response){
+                let sresult=response.responseText
+                let jresult=JSON.parse(sresult)
+                $("#loding").remove()
+                $('#error_modal  div.modal-body').empty()
+                $('#error_modal  div.modal-body').append("<p>"+jresult.error+"</p>")
+                $('#error_modal').modal('show')
+                console.log(sresult)
+                console.log(JSON.parse(sresult))
             }
         });
     })

@@ -10,6 +10,9 @@
     background:#f0740e;
     z-index: 500;
     height: 100vh;
+    position: sticky;
+    top: 0px;
+    right: 0px;
 }
 
 #side_bar-logo {
@@ -31,7 +34,7 @@
 
 .content{
     background-color: honeydew;
-    height: 500px;
+    min-height: 500px;
     -webkit-box-shadow: 3px 2px 15px 5px rgba(250, 164, 65, 0.085); 
     box-shadow: 3px 2px 15px 5px rgba(250, 164, 65, 0.085);
     border: black 1px solid;
@@ -98,9 +101,28 @@
   .listing-container {
     overflow: scroll;
     border: 2px orange solid;
+    max-height: 500px;
     min-height: 270px;
+    margin-bottom: 20px;
   }
 
   .listing-container  ul,li p {
     display: inline;
   }
+
+.modal-header,.modal-footer {
+    border: none;
+}
+
+#listing li > ul {
+  display: none;
+}
+
+
+.permision_ko {
+  color: red;
+}
+
+.modal-body p {
+  word-wrap: break-word;
+}
