@@ -67,7 +67,6 @@ class listrep(View):
     def post(self, request, *args, **kwargs):
         if (request.is_ajax() and request.method == "POST"):
             try:         
-                time.sleep(30)
                 self.DirObject=[]
                 ubody=json.loads(request.body.decode("utf-8"))
                 path=ubody["path"]
