@@ -89,10 +89,7 @@ $('[data-toggle="tooltip"]').tooltip()
 
 b=null
     $("#go-button").on("click",function(){
-        $("#go-button").after(`<div id="loading" class="spinner-border text-primary" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>`)
-        
+        $(".loader").toggle()
         path=$("#path").val()
         depth=$("#depth").val()
         $.ajaxSetup({ 
@@ -128,13 +125,13 @@ b=null
             success: function (response) {
                 let jresult=JSON.parse(JSON.stringify(response))
                 drawTree(jresult)
-                $("#loding").remove()
+                $(".loader").toggle()
                 console.log(jresult)
             },
             error: function(response){
                 let sresult=response.responseText
                 let jresult=JSON.parse(sresult)
-                $("#loding").remove()
+                $(".loader").toggle()
                 $('#error_modal  div.modal-body').empty()
                 $('#error_modal  div.modal-body').append("<p>"+jresult.error+"</p>")
                 $('#error_modal').modal('show')

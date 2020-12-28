@@ -37,6 +37,7 @@
                                 </div>
                                 <div class="row">
                                     <button id="go-button" type="button" class="col-1 btn btn-info">Go</button>
+                                    <div  class="loader">Loading...</div>
                                 </div>
                             </div>
                             <div class="listing-container" >
@@ -77,8 +78,8 @@
         <!--NavBar end-->
 
         <script src="{%  static "js/jquery.js" %}" ></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
         <script src="https://kit.fontawesome.com/e7c2f3706d.js" crossorigin="anonymous"></script>
         <script src="{% static "js/tree.js" %}"></script>
         {% block js %}

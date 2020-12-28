@@ -49,6 +49,7 @@ class listrep(View):
        
                 #counter internal loop
                 i+=1
+            # Counter object depth
             counter+=1
 
             for elment in with_childs:
@@ -59,8 +60,7 @@ class listrep(View):
                     print("index")
                     print(elment["index"])
                     self.loopDir(path=elment["path"],depth=depth,counter=counter,object=object[elment["index"]]["childs"])
-            # Counter object depth
-        a=[]
+            
         
 
 
@@ -111,5 +111,4 @@ class listrep(View):
 
 
 
-a=PermissionError()
-a.errno
+
