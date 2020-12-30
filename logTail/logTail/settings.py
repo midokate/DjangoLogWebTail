@@ -124,3 +124,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     STATICFILES_DIR,
 ]
+
+
+
+##Log tail setting
+logTail_limit=50
