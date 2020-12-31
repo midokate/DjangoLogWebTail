@@ -29,19 +29,22 @@ $('[data-toggle="tooltip"]').tooltip()
     function itemClicked(){
         $(".listing-container  li > div").off().on("click",function(){ 
             if ($(this).children("i:first-child").hasClass("permision_ok")){
-                $(".listing-container  ul,li div.bg-primary").removeClass("bg-primary");
-                $(this).addClass("bg-primary");
-
-                if ( $(this).siblings("ul").length){
-                    $(this).siblings("ul").show()
+                ulelment=$("[path='"+$(this).parent("li").attr("path")+"']").find("ul")   
+                //ajaxGetChildren($("#"+$(this).parent("li").attr("id")+"_ul"),$(this).parent("li").attr("path"),1,0)
+                if (ulelment.is(':visible')){
+                    $("[path='"+$(this).parent("li").attr("path")+"'] > ul").hide()
                 }
                 else {
-                    $(this).parent("li").append("<ul id='"+$(this).parent("li").attr("id")+"_ul' ></ul>")
-                    //ajaxGetChildren($("#"+$(this).parent("li").attr("id")+"_ul"),$(this).parent("li").attr("path"),$("#depth").val(),parseInt($(this).parent("li").attr("id").match(/(\d+)$/)[0]))
-                    ajaxGetChildren($("#"+$(this).parent("li").attr("id")+"_ul"),$(this).parent("li").attr("path"),1,0)
-                    $("#"+$(this).parent("li").attr("id")+"_ul").toggle() 
-                    itemClicked()
+                    $(".listing-container  ul,li div.bg-primary").removeClass("bg-primary");
+                    $(this).addClass("bg-primary");
+                    $(this).parent("li").find("ul").remove()
+                    $(".loader").show()
+                    $(this).parent("li").append("<ul level='"+$(this).parent("li").attr("level")+"_ul' ></ul>")
+                    ajaxGetChildren($("[path='"+$(this).parent("li").attr("path")+"'] > ul"),$(this).parent("li").attr("path"),parseInt($(this).parent("li").attr("level").match(/(\d+)$/)[0])+1,parseInt($(this).parent("li").attr("level").match(/(\d+)$/)[0]))
+                    $("[path='"+$(this).parent("li").attr("path")+"'] > ul").show() 
                 }
+                itemClicked()
+            
             }
 
             //console.log(this.parentElement.find("ul"))
@@ -56,8 +59,7 @@ $('[data-toggle="tooltip"]').tooltip()
         console.log(counter)
         if ( Array.isArray(item)  && counter <= depth  ){
             for (let i in item ){
-                lpath=path+"/"+item[i].name
-                createItem(item[i],parent,counter,depth,lpath)
+                createItem(item[i],parent,counter,depth,path)
             }
         }
 
@@ -81,21 +83,21 @@ $('[data-toggle="tooltip"]').tooltip()
         else if (  item.childs && counter <= depth ){
             lpath=path+"/"+item.name
             counter++
-            parent.append("<li ftype='"+item.type+"'  path='"+lpath+"' id='"+item.name+"_"+counter+"'><div><i class=\"permision_ok fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")
-            $("[id='"+item.name+"_"+counter+"']").append("<ul id='"+item.name+"_"+counter+"_ul' ></ul>")
-            createItem(item.childs,$("[id='"+item.name+"_"+counter+"_ul']"),counter,depth,lpath)
+            parent.append("<li ftype='"+item.type+"'  path='"+lpath+"' level='"+item.name+"_"+counter+"'><div><i class=\"permision_ok fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")
+            $("[path='"+lpath+"']").append("<ul level='"+item.name+"_"+counter+"_ul' ></ul>")
+            createItem(item.childs,$("[path='"+lpath+"'] > ul"),counter,depth,lpath)
         }
         else {
             if (counter <= depth){
                 if (item.childs === false) {
                     counter++
                     lpath=path+"/"+item.name
-                    parent.append("<li ftype='"+item.type+"' path='"+lpath+"' id='"+item.name+"_"+counter+"'><div data-toggle=\"tooltip\" data-placement=\"top\" title=\"Permission denied\" ><i class=\"permision_ko fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")
+                    parent.append("<li ftype='"+item.type+"' path='"+lpath+"' level='"+item.name+"_"+counter+"'><div data-toggle=\"tooltip\" data-placement=\"top\" title=\"Permission denied\" ><i class=\"permision_ko fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")
                 }
                 else {
                     counter++
                     lpath=path+"/"+item.name
-                    parent.append("<li ftype='"+item.type+"' path='"+lpath+"' id='"+item.name+"_"+counter+"'><div><i class=\"permision_ok fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")               
+                    parent.append("<li ftype='"+item.type+"' path='"+lpath+"' level='"+item.name+"_"+counter+"'><div><i class=\"permision_ok fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")               
                 }
             }
         }
@@ -161,6 +163,7 @@ $('[data-toggle="tooltip"]').tooltip()
                 }
                 else {
                     try {
+                    itemClicked()
                     let sresult=response.responseText
                     let jresult=JSON.parse(sresult)
                     $(".loader").hide()

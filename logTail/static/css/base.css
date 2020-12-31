@@ -32,7 +32,7 @@
 }
 
 
-.content{
+.filebrowser{
     background-color: honeydew;
     min-height: 500px;
     -webkit-box-shadow: 3px 2px 15px 5px rgba(250, 164, 65, 0.085); 
@@ -101,13 +101,14 @@
   .listing-container {
     overflow: scroll;
     border: 2px orange solid;
-    max-height: 500px;
+    max-height: 40vh;
     min-height: 270px;
     margin-bottom: 20px;
   }
 
   .listing-container  ul,li p {
     display: inline;
+    cursor: pointer;
   }
 
 .modal-header,.modal-footer {
