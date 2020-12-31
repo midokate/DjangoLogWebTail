@@ -31,17 +31,7 @@ $('[data-toggle="tooltip"]').tooltip()
             if ($(this).children("i:first-child").hasClass("permision_ok")){
                 $(".listing-container  ul,li div.bg-primary").removeClass("bg-primary");
                 $(this).addClass("bg-primary");
-
-                if ( $(this).siblings("ul").length){
-                    $(this).siblings("ul").show()
-                }
-                else {
-                    $(this).parent("li").append("<ul id='"+$(this).parent("li").attr("id")+"_ul' ></ul>")
-                    //ajaxGetChildren($("#"+$(this).parent("li").attr("id")+"_ul"),$(this).parent("li").attr("path"),$("#depth").val(),parseInt($(this).parent("li").attr("id").match(/(\d+)$/)[0]))
-                    ajaxGetChildren($("#"+$(this).parent("li").attr("id")+"_ul"),$(this).parent("li").attr("path"),1,0)
-                    $("#"+$(this).parent("li").attr("id")+"_ul").toggle() 
-                    itemClicked()
-                }
+                $(this).siblings("ul").toggle()
             }
 
             //console.log(this.parentElement.find("ul"))
@@ -52,8 +42,6 @@ $('[data-toggle="tooltip"]').tooltip()
 // function to create list item , recursive function called by th function bellow : drawTree()
     function createItem(item,parent,counter,depth,path){
         // when childs true the parent object is an empty array : loop throught its elements
-        //counter++
-        console.log(counter)
         if ( Array.isArray(item)  && counter <= depth  ){
             for (let i in item ){
                 lpath=path+"/"+item[i].name
@@ -83,17 +71,15 @@ $('[data-toggle="tooltip"]').tooltip()
             counter++
             parent.append("<li ftype='"+item.type+"'  path='"+lpath+"' id='"+item.name+"_"+counter+"'><div><i class=\"permision_ok fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")
             $("[id='"+item.name+"_"+counter+"']").append("<ul id='"+item.name+"_"+counter+"_ul' ></ul>")
-            createItem(item.childs,$("[id='"+item.name+"_"+counter+"_ul']"),counter,depth,lpath)
+            createItem(item.childs,$("[id='"+item.name+"_"+counter+"_ul']"),counter,depth,path)
         }
         else {
             if (counter <= depth){
                 if (item.childs === false) {
-                    counter++
                     lpath=path+"/"+item.name
                     parent.append("<li ftype='"+item.type+"' path='"+lpath+"' id='"+item.name+"_"+counter+"'><div data-toggle=\"tooltip\" data-placement=\"top\" title=\"Permission denied\" ><i class=\"permision_ko fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")
                 }
                 else {
-                    counter++
                     lpath=path+"/"+item.name
                     parent.append("<li ftype='"+item.type+"' path='"+lpath+"' id='"+item.name+"_"+counter+"'><div><i class=\"permision_ok fas fa-"+item.type +"\"></i>"+item.name+"</div></li>")               
                 }
@@ -102,16 +88,22 @@ $('[data-toggle="tooltip"]').tooltip()
         itemClicked()
     }
 
-    function drawTree(object,parent,path,depth,counter){
-        parent.empty()
+    function drawTree(object,parent,path){
+        let c=0
+        let d=$("#depth").val()
+        $("#listing").empty()
         for (var i in object){
             //createItem( object[i] , $("#listing"),c,d,"")
-            createItem( object[i] , parent ,counter,depth,path)
+            createItem( object[i] , parent ,c,d,path)
             //$("#path").val()
         }
     }
 
-    function ajaxGetChildren(parent,path,depth,counter){
+b=null
+    $("#go-button").on("click",function(){
+        $(".loader").toggle()
+        path=$("#path").val()
+        depth=$("#depth").val()
         $.ajaxSetup({ 
             beforeSend: function(xhr, settings) {
                 function getCookie(name) {
@@ -145,16 +137,16 @@ $('[data-toggle="tooltip"]').tooltip()
             }),
             success: function (response) {
                 let jresult=JSON.parse(JSON.stringify(response))
-                drawTree(jresult,parent,path,depth,counter)
+                drawTree(jresult,$("#listing"),path)
 
-                $(".loader").hide()
+                $(".loader").toggle()
                 console.log(jresult)
             },
             error: function(response,textstatus){
                 console.log(textstatus)
                 console.log(response)
                 if (["timeout","abort","parsererror","errorThrown"].includes(textstatus)){
-                    $(".loader").hide()
+                    $(".loader").toggle()
                     $('#error_modal  div.modal-body').empty()
                     $('#error_modal  div.modal-body').append("<p> An error occured <br> please check your connection or try later </p>")
                     $('#error_modal').modal('show')
@@ -163,14 +155,14 @@ $('[data-toggle="tooltip"]').tooltip()
                     try {
                     let sresult=response.responseText
                     let jresult=JSON.parse(sresult)
-                    $(".loader").hide()
+                    $(".loader").toggle()
                     $('#error_modal  div.modal-body').empty()
                     $('#error_modal  div.modal-body').append("<p>"+jresult.error+"</p>")
                     $('#error_modal').modal('show')
                     console.log(sresult)
                     console.log(JSON.parse(sresult))
                     } catch (e) {
-                        $(".loader").hide()
+                        $(".loader").toggle()
                         $('#error_modal  div.modal-body').empty()
                         $('#error_modal  div.modal-body').append("<p> Unknown error ! </p>")
                         $('#error_modal').modal('show')
@@ -178,13 +170,6 @@ $('[data-toggle="tooltip"]').tooltip()
                 }
             }
         });
-    }
-
-    $("#go-button").on("click",function(){
-        $(".loader").show()
-        path=$("#path").val()
-        depth=$("#depth").val()
-        ajaxGetChildren($("#listing"),path,depth,0)
     })
 
 })
