@@ -6,11 +6,13 @@ import json
 from django.http import HttpResponse, JsonResponse
 import traceback
 import datetime
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 # Create your views here.
 def tag(request):
     return render(request,"main/tag.html")
-
+    
+@ensure_csrf_cookie
 def home(request):
     return render(request,"main/base.html")
 
@@ -107,5 +109,64 @@ class listrep(View):
                 return HttpResponse(json.dumps(resp),status=500)
 
 
+class tailfile(View):
+    DirObject=None
+
+    def post(self, request, *args, **kwargs):
+        
+        if (request.is_ajax() and request.method == "POST"):
+            try:         
+                self.DirObject=[]
+                ubody=json.loads(request.body.decode("utf-8"))
+                path=ubody["path"]
+                position=int(ubody["position"])
+
+                new_path=""
+                counter=0
+
+                if (path == ""):
+                    resp={ "error" : "No path entered"}
+                    return HttpResponse (json.dumps(resp),status=500)
+                if (os.name == 'nt' and path !=''):
+                    for el in path.split("/"):
+                        if (counter==0):
+                            pass
+                        if (path[0]=="/" and counter==1):
+                            new_path=el+":\\"
+                        else:
+                            new_path=os.path.join(new_path,el)
+                        counter+=1
+                else:
+                    new_path=path
+
+                if ( new_path !='' and  os.path.exists(new_path)  ):
+                    try:
+                        if (os.path.isfile(new_path)):
+                            content=''
+                            with open(new_path,'r') as file:
+                                if (position!=-1):
+                                    file.seek(position)
+                                for line in file.readlines():
+                                    content+=line.replace("\n","<br>")
+                                position=file.tell()
+                                resp={"path":new_path,"position":position,"content":content}
+                                return HttpResponse(json.dumps(resp),status=200)                       
+                        else:
+                            resp={ "error" : "The selected item is not a file" }
+                            return HttpResponse(json.dumps(resp),status=500)
+                    except PermissionError as e :
+                        resp={ "error" : "Permission denied" }
+                        return HttpResponse(json.dumps(resp),status=500)
+                    except Exception as e:
+                        resp={ "error" : str(e) }
+                        return HttpResponse(json.dumps(resp),status=500)
+            
+                else:
+                    resp={ "error" : "Path doesn't existe"}
+                    return HttpResponse(json.dumps(resp),status=500)
+
+            except Exception as e : 
+                resp={ "error" : str(e) + "\n"+ traceback.format_exc() }
+                return HttpResponse(json.dumps(resp),status=500)
 
 

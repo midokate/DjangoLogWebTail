@@ -28,10 +28,14 @@ $('[data-toggle="tooltip"]').tooltip()
 //functien trigered when an item is clicked ==> add color primary to list items and toggle hide/show subfolders
     function itemClicked(){
         $(".listing-container  li > div").off().on("click",function(){ 
-            if ($(this).children("i:first-child").hasClass("permision_ok")){
+            if ($(this).children("i:first-child").hasClass("permision_ok") ){
                 ulelment=$("[path='"+$(this).parent("li").attr("path")+"']").find("ul")   
                 //ajaxGetChildren($("#"+$(this).parent("li").attr("id")+"_ul"),$(this).parent("li").attr("path"),1,0)
-                if (ulelment.is(':visible')){
+                if ($(this).parent("li").attr("ftype")==="file"){
+                    $(".listing-container  ul,li div.bg-primary").removeClass("bg-primary");
+                    $(this).addClass("bg-primary");  
+                }
+                else if (ulelment.is(':visible')){
                     $("[path='"+$(this).parent("li").attr("path")+"'] > ul").hide()
                 }
                 else {

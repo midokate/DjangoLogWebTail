@@ -129,3 +129,5 @@ STATICFILES_DIRS = [
 
 ##Log tail setting
 logTail_limit=50
+nb_line_per_tail=10
+

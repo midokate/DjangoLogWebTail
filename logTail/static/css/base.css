@@ -199,3 +199,21 @@
     transform: rotate(360deg);
   }
 }
+
+
+#tail-button{
+  border-radius: 0px 50px 50px 0px;
+
+}
+
+.tail-container{
+  min-height: 100px;
+  background-color: honeydew;
+  min-height: 500px;
+  -webkit-box-shadow: 3px 2px 15px 5px rgba(250, 164, 65, 0.085); 
+  box-shadow: 3px 2px 15px 5px rgba(250, 164, 65, 0.085);
+  border: black 1px solid;
+  border-radius: 10px;
+}
+
+
