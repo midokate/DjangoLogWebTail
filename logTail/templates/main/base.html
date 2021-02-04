@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MiniBlog</title>
+        <title>Logtail</title>
         {% block css %}
         {% endblock css %}
         <!-- Required meta tags -->
@@ -15,71 +15,11 @@
         <!--NavBar-->
         <nav id="navbar" >
                 <div class=" bg-light">
-                    <div id="header"></div>
-                    <div class="container-fluid">
-                        <div class="row">
-                            
-                            <div class="col-3 filebrowser  mt-3  container">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <label class="col-10" for="path">Path</label>
-                                        <label  class="col-2" for="depth">Depth</label>
-                                    </div>
-                                    <div class="row">
-                                        <input type="text" class="col-10 form-control" id="path" aria-describedby="Type the folder path to scrape" placeholder="Type folder path to scrape">
-                                        <input type="number" value="1" min="1" class="col-2 form-control" id="depth"  placeholder="Subtree depth">
-                                        <small id="emailHelp" class="form-text text-muted"> Linux format:  <strong>c:\folder</strong>  becomes <strong>/c/folder</strong></small>
-                                    </div>
-                                    <div class="row">
-                                        <button id="go-button" type="button" class="col-2 btn btn-info">Go</button>
-                                        <div  class="loader">Loading...</div>
-                                        <button id="tail-button" type="button" class="ml-auto  col-3 btn btn-danger text-white">Tail -f</button>
-                                    </div>
-                                </div>
-                                <div class="listing-container" >
-                                    <ul id="listing" class="tree">
-
-                                    </ul>
-                                </div>
-                                <div class="col-8 m-0"></div>
-                                {% block body %}
-                                {% endblock body %} 
-
-
-                                <!--modal-->
-                                <div class="modal fade " id="error_modal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog  modal-dialog-centered" role="document">
-                                    <div class="modal-content bg-warning">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" >Error</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body ">
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
-                                <!--End modal-->
-                            </div>
-                            <div class="col-9 tail-container mt-3">                  
-                                <div id="tail-ouput" class="container">
-
-                                </div>
-                            </div>
-                        
-                        </div> 
-                    </div>
-                
-                </div>
-        </nav>
+                    <div id="header"><h1 class='logo'>LogTail</h1></div>
+        </nav>       
+        {% block body %}
+        {% endblock body %} 
         <!--NavBar end-->
-
         <script src="{%  static "js/jquery.js" %}" ></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>

@@ -1,7 +1,8 @@
 $(function() {
     let outputItem=$("#tail-ouput");
-    stopAjaxGetLine=false
-    console.log("clicked")
+    stopAjaxGetLine=false;
+    console.log("clicked");
+    scrolDown=true;
     function error(msg){
         $('#error_modal  div.modal-body').empty()
         $('#error_modal  div.modal-body').append("<p>"+msg+"</p>")
@@ -51,6 +52,7 @@ $(function() {
                 content=jresult.content
                 position=jresult.position
                 outputItem.append(content);
+                if (scrolDown) {$('.tail-container').animate({scrollTop: $('.tail-container').prop("scrollHeight") },'50')}
             },
             error: function(response,textstatus){
                 if (["timeout","abort","parsererror","errorThrown"].includes(textstatus)){
@@ -80,12 +82,13 @@ $(function() {
             }
         });
 
+        if (!stopAjaxGetLine) { await sleep(6000)} ;
+
         while (stopAjaxGetLine){
             await sleep(6000);
         }
 
         if (! stopAjaxGetLine ){
-            await sleep(6000);
             ajaxGetLine(path,position);
         }
         
@@ -115,11 +118,20 @@ $(function() {
         let selectedItem=$("div.bg-primary").parent("li")[0]
         console.log(selectedItem.getAttribute('path'))
         ajaxGetLine(selectedItem.getAttribute('path'),-1)
+        $(".do-tail.fa-arrow-down").addClass("fa-ban")
+        $(".do-tail.fa-arrow-down").removeClass("fa-arrow-down")
+        scrolDown=true
         }
         else {
             error("No field selected")
         }
         
     })
+
+    $('.do-tail').on("click",function (){
+        $(this).toggleClass("fa-arrow-down");
+        $(this).toggleClass("fa-ban");
+        scrolDown=scrolDown ? false:true;
+    });
 }
 )

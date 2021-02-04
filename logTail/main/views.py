@@ -14,7 +14,7 @@ def tag(request):
     
 @ensure_csrf_cookie
 def home(request):
-    return render(request,"main/base.html")
+    return render(request,"main/home.html")
 
 
 class listrep(View):
