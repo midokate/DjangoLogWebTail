@@ -16,6 +16,7 @@ $(function() {
       
 
     async function ajaxGetLine(path,position){
+        console.log(path)
         $.ajaxSetup({ 
             beforeSend: function(xhr, settings) {
                 function getCookie(name) {
@@ -88,7 +89,7 @@ $(function() {
             await sleep(6000);
         }
 
-        if (! stopAjaxGetLine ){
+        if (! stopAjaxGetLine && path===$("div.bg-primary").parent("li")[0].getAttribute("path")){
             ajaxGetLine(path,position);
         }
         
