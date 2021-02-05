@@ -99,16 +99,16 @@ $(function() {
         outputItem.empty()
         if ($(".listing-container  ul,li div.bg-primary").parent("li").length !=0 ){
         console.log("clicked")
-        $('#stop-button').toggle();
+        $('#stop-button').show();
         if ($('#continue-button').is(":visible")){ $('#continue-button').toggle();}
         stopAjaxGetLine=false
-        $('#stop-button').on("click",function () { 
+        $('#stop-button').off().on("click",function () { 
                 stopAjaxGetLine=true ;
                 //$('#continue-button').toggle()
                 $('#continue-button').toggle();
                 $('#stop-button').toggle();
                 });
-        $('#continue-button').on("click",function(){
+        $('#continue-button').off().on("click",function(){
                 stopAjaxGetLine=false ;
                 //$('#continue-button').toggle()
                 $('#continue-button').toggle();
@@ -132,6 +132,9 @@ $(function() {
         $(this).toggleClass("fa-arrow-down");
         $(this).toggleClass("fa-ban");
         scrolDown=scrolDown ? false:true;
+        if (scrolDown) {
+            $('.tail-container').animate({scrollTop: $('.tail-container').prop("scrollHeight") },'50')
+        }
     });
 }
 )
