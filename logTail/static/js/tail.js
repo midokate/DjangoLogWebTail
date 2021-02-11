@@ -56,6 +56,9 @@ $(function() {
                 if (scrolDown) {$('.tail-container').animate({scrollTop: $('.tail-container').prop("scrollHeight") },'50')}
             },
             error: function(response,textstatus){
+                stopAjaxGetLine=true
+                $('#stop-button').hide()
+                $('#continue-button').show();
                 if (["timeout","abort","parsererror","errorThrown"].includes(textstatus)){
                     $(".loader").hide()
                     $('#error_modal  div.modal-body').empty()
