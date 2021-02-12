@@ -146,6 +146,8 @@ class tailfile(View):
                             with open(new_path,'r') as file:
                                 if (position!=-1):
                                     file.seek(position)
+                                else:
+                                    file.seek(os.path.getsize(new_path))
                                 for line in file.readlines():
                                     content+=line.replace("\n","<br>")
                                 position=file.tell()
