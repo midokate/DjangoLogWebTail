@@ -3,6 +3,8 @@ $(function() {
     stopAjaxGetLine=false;
     console.log("clicked");
     scrolDown=true;
+    tailRunning=false
+    cancel=false;
     function error(msg){
         $('#error_modal  div.modal-body').empty()
         $('#error_modal  div.modal-body').append("<p>"+msg+"</p>")
@@ -16,6 +18,7 @@ $(function() {
       
 
     async function ajaxGetLine(path,position){
+
         console.log(path)
         $.ajaxSetup({ 
             beforeSend: function(xhr, settings) {
@@ -58,6 +61,7 @@ $(function() {
             error: function(response,textstatus){
                 stopAjaxGetLine=true
                 $('#stop-button').hide()
+                $('#cancel-button').hide()
                 $('#continue-button').show();
                 if (["timeout","abort","parsererror","errorThrown"].includes(textstatus)){
                     $(".loader").hide()
@@ -84,52 +88,77 @@ $(function() {
                     }
                 }
             }
-        });
-
-        if (!stopAjaxGetLine) { await sleep(6000)} ;
-
-        while (stopAjaxGetLine){
-            await sleep(6000);
-        }
-
-        if (! stopAjaxGetLine && path===$("div.bg-primary").parent("li")[0].getAttribute("path")){
-            ajaxGetLine(path,position);
-        }
         
+        });
+        if ( cancel ) {
+            error("tail canceled")
+            tailRunning=false
+            cancel=false
+            console.log("canceld end")
+        }
+        else {
+            console.log("no canceld loop")
+            if (!stopAjaxGetLine ) { await sleep(2000)} ;
+
+            while (stopAjaxGetLine  ){
+                await sleep(2000);
+            }
+
+            if (! stopAjaxGetLine && path===$("div.bg-primary").parent("li")[0].getAttribute("path")  ){
+                ajaxGetLine(path,position);
+                }
+        }
     }
     if ($('#stop-button').length === 0 ) { $('#tail-button').before(`<button  style='display: none;' display=none id="stop-button" type="button" class="ml-auto mr-0 col-3 btn btn-primary text-white">Stop </button>`) }
     if ($('#continue-button').length === 0 ) { $('#tail-button').before(`<button style='display: none;' id="continue-button" type="button" class="ml-auto mr-0 col-3 btn btn-success text-white">continue </button>`)}
+    if ($('#cancel-button').length === 0 ) { $('#tail-button').before(`<button  style='display: none;' display=none id="cancel-button" type="button" class="ml-auto mr-0 col-3 btn btn-danger text-white">cancel </button>`) }
     $('#tail-button').on("click",function () {
-        outputItem.empty()
-        if ($(".listing-container  ul,li div.bg-primary").parent("li").length !=0 ){
-        console.log("clicked")
-        $('#stop-button').show();
-        if ($('#continue-button').is(":visible")){ $('#continue-button').toggle();}
-        stopAjaxGetLine=false
-        $('#stop-button').off().on("click",function () { 
-                stopAjaxGetLine=true ;
-                //$('#continue-button').toggle()
-                $('#continue-button').toggle();
-                $('#stop-button').toggle();
+        if ( ! tailRunning )
+            {
+                tailRunning=true
+                outputItem.empty()
+                if ($(".listing-container  ul,li div.bg-primary").parent("li").length !=0 ){
+                console.log("clicked")
+                $('#stop-button').show();
+                $('#cancel-button').show();
+                if ($('#continue-button').is(":visible")){ $('#continue-button').toggle();}
+                stopAjaxGetLine=false
+                $('#stop-button').off().on("click",function () { 
+                        stopAjaxGetLine=true ;
+                        //$('#continue-button').toggle()
+                        $('#continue-button').toggle();
+                        $('#cancel-button').toggle();
+                        $('#stop-button').toggle();
+                        });
+                $('#cancel-button').off().on("click",function () { 
+                        cancel=true ;
+                        console.log("canceld clicked")
+                        //$('#continue-button').toggle()
+                        $('#cancel-button').hide();
+                        $('#continue-button').hide();
+                        $('#stop-button').hide();
+                        });
+                $('#continue-button').off().on("click",function(){
+                        stopAjaxGetLine=false ;
+                        //$('#continue-button').toggle()
+                        $('#continue-button').toggle();
+                        $('#cancel-button').toggle();
+                        $('#stop-button').toggle();
                 });
-        $('#continue-button').off().on("click",function(){
-                stopAjaxGetLine=false ;
-                //$('#continue-button').toggle()
-                $('#continue-button').toggle();
-                $('#stop-button').toggle();
-        });
-        
-        let selectedItem=$("div.bg-primary").parent("li")[0]
-        console.log(selectedItem.getAttribute('path'))
-        ajaxGetLine(selectedItem.getAttribute('path'),-1)
-        $(".do-tail.fa-arrow-down").addClass("fa-ban")
-        $(".do-tail.fa-arrow-down").removeClass("fa-arrow-down")
-        scrolDown=true
-        }
-        else {
-            error("No field selected")
-        }
-        
+                
+                let selectedItem=$("div.bg-primary").parent("li")[0]
+                console.log(selectedItem.getAttribute('path'))
+                ajaxGetLine(selectedItem.getAttribute('path'),-1)
+                $(".do-tail.fa-arrow-down").addClass("fa-ban")
+                $(".do-tail.fa-arrow-down").removeClass("fa-arrow-down")
+                scrolDown=true
+                }
+                else {
+                    error("No field selected")
+                }
+            }
+
+        else { error("Youre tailing a file , please click on stop <br> and click on tail again") }
     })
 
     $('.do-tail').on("click",function (){
