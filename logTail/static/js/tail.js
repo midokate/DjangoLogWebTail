@@ -131,6 +131,7 @@ $(function() {
                         $('#stop-button').toggle();
                         });
                 $('#cancel-button').off().on("click",function () { 
+                        error("canceling ...")
                         cancel=true ;
                         console.log("canceld clicked")
                         //$('#continue-button').toggle()
