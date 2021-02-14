@@ -105,7 +105,8 @@ $(function() {
                 await sleep(2000);
             }
 
-            if (! stopAjaxGetLine && path===$("div.bg-primary").parent("li")[0].getAttribute("path")  ){
+            //if (! stopAjaxGetLine && path===$("div.bg-primary").parent("li")[0].getAttribute("path")  ){
+            if (! stopAjaxGetLine ){
                 ajaxGetLine(path,position);
                 }
         }
