@@ -89,7 +89,8 @@ $(function() {
                 }
             }
         
-        });
+        })
+
         if ( cancel ) {
             error("tail canceled")
             tailRunning=false
@@ -98,9 +99,9 @@ $(function() {
         }
         else {
             console.log("no canceld loop")
-            if (!stopAjaxGetLine ) { await sleep(2000)} ;
+            if (!stopAjaxGetLine && ! cancel ) { await sleep(2000)} ;
 
-            while (stopAjaxGetLine  ){
+            while (stopAjaxGetLine && ! cancel  ){
                 await sleep(2000);
             }
 
